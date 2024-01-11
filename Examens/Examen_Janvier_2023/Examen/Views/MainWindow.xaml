@@ -1,0 +1,79 @@
+﻿<Window x:Class="Examen.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Examen.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="listTemplate">
+            <StackPanel Margin="0 5 0 5">
+                <Label Content="{Binding ProductId}" HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                <Label Content="{Binding ProductName}" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+            </StackPanel>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <!-- Définition des colonnes -->
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Colonne de gauche -->
+        <Grid Grid.Column="0">
+            <!-- Définition des lignes dans la colonne de gauche -->
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+
+            <!-- Contenu de la première ligne -->
+            <ComboBox x:Name="combo" Grid.Row="0" Height="70" Width="240" Margin="6,6,6,5"  
+                      ItemTemplate="{StaticResource listTemplate}" 
+                      ItemsSource="{Binding ProductsList}"
+                      SelectedItem="{Binding SelectedProduct}">
+                <!-- Aucun besoin d'ajouter des éléments ici, car ils proviendront de la source de données liée -->
+            </ComboBox>
+
+            <!-- Contenu de la deuxième ligne -->
+            <Grid Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=combo}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel HorizontalAlignment="Left" Margin="80, 0, 0, 0">
+                    <Label Content="ProductID :" Margin="6" />
+                    <Label Content="ProductName :" Margin="6" />
+                    <Label Content="Catégorie :" Margin="6" />
+                    <Label Content="Fournisseur :" Margin="6" />
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" HorizontalAlignment="Left">
+                    <Label Content="{Binding ProductId}" Margin="6" />
+                    <Label Content="{Binding ProductName}" Margin="6" />
+                    <Label Content="{Binding CategoryName}" Margin="6" />
+                    <Label Content="{Binding SupplierName}" Margin="6" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Contenu de la troisième ligne -->
+            <Button Command ="{Binding DiscontinueCommand}" Content="Abandonner le produit sélectionné" 
+                    Width="200" Height="50" HorizontalAlignment="Center" Grid.Row="2"/>
+        </Grid>
+
+        <!-- Colonne de droite -->
+        <Grid Grid.Column="1">
+            <Label Margin="6" Content="Nombre de produits par Pays ayant été vendus au moins une fois" />
+            <DataGrid Name="dgCustomers" Margin="6" Grid.Row="1" AutoGenerateColumns="False" ItemsSource="{Binding ProductsSoldByCountry}" IsReadOnly="True">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Binding="{Binding Country}" Header="Country" Width="2*" />
+                    <DataGridTextColumn Binding="{Binding ProductCount}" Header="Number" Width="*" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

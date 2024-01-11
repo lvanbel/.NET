@@ -1,0 +1,81 @@
+﻿<Window x:Class="Examen.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Examen.Views"
+        mc:Ignorable="d"
+        Title="MainWindow" Height="600" Width="1000">
+    <Window.Resources>
+        <DataTemplate x:Key="listboxTemplate">
+            <StackPanel Orientation="Horizontal">
+                <!-- id du produit -->
+                <TextBlock Text="{Binding ProductId}" Margin="4"/>
+                <!-- nom du produit -->
+                <TextBlock Text="{Binding ProductName}" Margin="4"/>
+            </StackPanel>
+        </DataTemplate>
+        <DataTemplate x:Key="salesListTemplate">
+            <TextBlock Text="{Binding}" Margin="4"/>
+        </DataTemplate>
+    </Window.Resources>
+    <Grid>
+        <!-- Définition des rows -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Row du haut -->
+        <Grid Grid.Row="0">
+            <!-- Définition des lignes dans la colonne de gauche -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!-- Contenu de la première colonne -->
+            <ListBox x:Name="list" Grid.Row="0" Height="200" Width="300" Margin="6,6,6,5"  
+                     ItemTemplate="{StaticResource listboxTemplate}" 
+                     ItemsSource="{Binding ProductsList}" 
+                     SelectedItem="{Binding SelectedProduct}">
+            </ListBox>
+
+            <!-- Contenu de la deuxième colonne -->
+            <Grid Grid.Column="1">
+                <ListBox x:Name="list2" Grid.Row="0" Height="200" Width="300" Margin="6,6,6,5"  
+                         ItemsSource="{Binding ProductsSalesList}" 
+                         ItemTemplate="{StaticResource salesListTemplate}">         
+                </ListBox>
+
+            </Grid>
+        </Grid>
+
+        <!-- Row du bas -->
+        <Grid Grid.Row="1" DataContext="{Binding SelectedItem, ElementName=list}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="400" />
+                </Grid.ColumnDefinitions>
+                <StackPanel HorizontalAlignment="Left">
+                    <Label Content="ProductId :" Margin="6" />
+                    <Label Content="ProductName :" Margin="6" />
+                    <Label Content="SupplierConctactName :" Margin="6" />
+                    <Label Content="QuantityPerUnit :" Margin="6" />
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                    <TextBox Height="27" Margin="6,6,6,5" Text="{Binding ProductId}" IsEnabled="False"/>
+                    <TextBox Height="27" Margin="6,6,6,5" Text="{Binding ProductName}" />
+                    <TextBox Height="27" Margin="6,6,6,5" Text="{Binding SupplierContactName}" IsEnabled="False"/>
+                    <TextBox Height="27" Margin="6,6,6,5" Text="{Binding QuantityPerUnit}" />
+                </StackPanel>
+            </Grid>
+            <Button Grid.Row="1" Command ="{Binding MajCommand}" Content="Maj" Width="75" Margin="6,6,87,6" HorizontalAlignment="Center"/>
+        </Grid>
+    </Grid>
+</Window>
